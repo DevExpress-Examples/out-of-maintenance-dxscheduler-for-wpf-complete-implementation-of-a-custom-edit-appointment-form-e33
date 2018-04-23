@@ -1,0 +1,64 @@
+<Window x:Class="SchedulerCompleteAppointmentFormWpf.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:dxschcore="clr-namespace:DevExpress.XtraScheduler;assembly=DevExpress.XtraScheduler.v10.2.Core"
+        xmlns:dxsch="http://schemas.devexpress.com/winfx/2008/xaml/scheduler"
+        Title="MainWindow" Height="350" Width="525">
+    <Grid>
+        <dxsch:SchedulerControl Name="schedulerControl1" 
+                                HorizontalAlignment="Stretch" VerticalAlignment="Stretch" 
+                                ActiveViewType="Week"
+                                GroupType="Resource"
+                                EditAppointmentFormShowing="schedulerControl1_EditAppointmentFormShowing">
+
+            <dxsch:SchedulerControl.Storage>
+                <dxsch:SchedulerStorage>
+
+                    <dxsch:SchedulerStorage.Appointments>
+                        <dxsch:AppointmentStorage>
+                            <dxsch:AppointmentStorage.Mappings>
+                                <dxschcore:AppointmentMappingInfo Start="StartTime" 
+                                    End="EndTime" 
+                                    AllDay="AllDay"
+                                    Description="Description"
+                                    Label="Label"
+                                    Location="Location"
+                                    Subject="Subject" 
+                                    RecurrenceInfo="RecurrenceInfo"
+                                    ReminderInfo="ReminderInfo"
+                                    ResourceId="CarId"
+                                    Status="Status"
+                                    Type="EventType" />
+                            </dxsch:AppointmentStorage.Mappings>
+
+                            <!--region #CustomFieldMappings-->
+                            <dxsch:AppointmentStorage.CustomFieldMappings>
+                                <dxschcore:AppointmentCustomFieldMapping Name="Contact" 
+                                    Member="ContactInfo" 
+                                    ValueType="String" />
+                            </dxsch:AppointmentStorage.CustomFieldMappings>
+                            <!--endregion #CustomFieldMappings-->
+
+                        </dxsch:AppointmentStorage>
+                    </dxsch:SchedulerStorage.Appointments>
+
+                    <dxsch:SchedulerStorage.Resources>
+                        <dxsch:ResourceStorage>
+                            <dxsch:ResourceStorage.Mappings>
+                                <dxschcore:ResourceMappingInfo Id="ID"
+                                    Caption="Model" 
+                                    Image="Picture" />
+                            </dxsch:ResourceStorage.Mappings>
+                        </dxsch:ResourceStorage>
+                    </dxsch:SchedulerStorage.Resources>
+
+                </dxsch:SchedulerStorage>
+            </dxsch:SchedulerControl.Storage>
+            
+            <dxsch:SchedulerControl.WeekView>
+                <dxsch:WeekView ResourcesPerPage="3"></dxsch:WeekView>
+            </dxsch:SchedulerControl.WeekView>
+            
+        </dxsch:SchedulerControl>
+    </Grid>
+</Window>
