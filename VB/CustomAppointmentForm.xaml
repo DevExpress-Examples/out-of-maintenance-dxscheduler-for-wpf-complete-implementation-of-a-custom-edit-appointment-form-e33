@@ -1,0 +1,277 @@
+<UserControl x:Class="SchedulerCompleteAppointmentFormWpf.CustomAppointmentForm"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
+             xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors"
+             xmlns:dxsch="http://schemas.devexpress.com/winfx/2008/xaml/scheduler"
+             xmlns:dxschd="clr-namespace:DevExpress.Xpf.Scheduler.Drawing;assembly=DevExpress.Xpf.Scheduler.v11.1"
+             mc:Ignorable="d"
+             x:Name="AptForm" MinWidth="600" Loaded="AptForm_Loaded">
+    
+    <UserControl.Resources>
+        <dxschd:TimeSpanToDateTimeConverter x:Key="timeSpanToDateTimeConverter" />
+        <dxschd:InvertedBoolConverter x:Key="invertedBoolConverter" />
+        <dxsch:SchedulerControlStringIdConverter x:Key="SchedulerControlStringIdConverter" />
+
+        <DataTemplate x:Key="RecTypeTemplate">
+            <TextBlock Text="{Binding Description}" VerticalAlignment="Center" />
+        </DataTemplate>
+        <DataTemplate x:Key="ResourceItemTemplate">
+            <TextBlock Text="{Binding Caption}" VerticalAlignment="Center" />
+        </DataTemplate>
+
+        <!--Resources-->
+        <DataTemplate x:Key="ResourceTemplate">
+            <dxsch:AppointmentResourceEdit SchedulerControl="{Binding Control}" EditValue="{Binding ResourceId, UpdateSourceTrigger=PropertyChanged}"></dxsch:AppointmentResourceEdit>
+        </DataTemplate>
+       
+        <DataTemplate x:Key="ResourcesTemplate">
+            <dxsch:AppointmentResourcesEdit SchedulerControl="{Binding Control}" ResourceIds="{Binding AppointmentResourceIds, UpdateSourceTrigger=PropertyChanged}"></dxsch:AppointmentResourcesEdit>           
+        </DataTemplate>
+
+        <dxsch:ResourcesTemplateSelector x:Key="ResTemplateSelector" 
+            ResourceTemplate="{StaticResource ResourceTemplate}" 
+            ResourcesTemplate="{StaticResource ResourcesTemplate}">
+        </dxsch:ResourcesTemplateSelector>
+
+        <Style TargetType="{x:Type TextBlock}">
+            <Setter Property="Margin" Value="0,0,0,4" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+        </Style>
+        
+        <Style TargetType="{x:Type dxe:TextEdit}">
+            <Setter Property="Margin" Value="0,0,0,4" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+        </Style>
+        <Style TargetType="{x:Type dxe:ButtonEdit}">
+            <Setter Property="Margin" Value="0,0,0,4" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="MinHeight" Value="22" />
+        </Style>
+        <Style TargetType="{x:Type dxe:DateEdit}">
+            <Setter Property="Margin" Value="0,0,0,4" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="MinHeight" Value="22" />            
+        </Style>
+        <Style TargetType="{x:Type dxe:ComboBoxEdit}">
+            <Setter Property="Padding" Value="4,0,0,0" />
+            <Setter Property="Margin" Value="0,0,0,4" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="MinHeight" Value="22" />            
+        </Style>
+        <Style TargetType="{x:Type dxsch:AppointmentStatusEdit}">
+            <Setter Property="Padding" Value="4,0,0,0" />
+            <Setter Property="Margin" Value="0,0,0,4" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="MinHeight" Value="22" />
+        </Style>
+        <Style TargetType="{x:Type dxsch:AppointmentLabelEdit}">
+            <Setter Property="Padding" Value="4,0,0,0" />
+            <Setter Property="Margin" Value="0,0,0,4" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="MinHeight" Value="22" />
+        </Style>
+        <Style TargetType="{x:Type dxsch:AppointmentResourceEdit}">
+            <Setter Property="Padding" Value="4,0,0,0" />
+            <Setter Property="Margin" Value="0,0,0,4" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="MinHeight" Value="22" />
+        </Style>
+        <Style TargetType="{x:Type dxe:CheckEdit}">
+            <Setter Property="Margin" Value="0,0,0,4" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+        </Style>        
+    </UserControl.Resources>
+
+    <Grid IsSharedSizeScope="True" Margin="12">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />                
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" SharedSizeGroup="LeftCaptions" MinWidth="80" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <TextBlock Grid.Row="0" Grid.Column="0" Text="{Binding Source={StaticResource SchedulerControlStringIdConverter}, ConverterParameter=Form_Subject, Converter={StaticResource SchedulerControlStringIdConverter}}" />
+        <dxe:TextEdit x:Name="subjectEdit" Grid.Row="0" Grid.Column="1" Text="{Binding Controller.Subject, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding ReadOnly, Converter={dxschd:InvertedBoolConverter}}" />
+
+        <TextBlock Grid.Row="1" Grid.Column="0" Text="{Binding Source={StaticResource SchedulerControlStringIdConverter}, ConverterParameter=Form_Location, Converter={StaticResource SchedulerControlStringIdConverter}}" Margin="0,0,0,12" />
+        <dxe:TextEdit Grid.Row="1" Grid.Column="1" Text="{Binding Controller.Location}" Margin="0,0,0,12" IsEnabled="{Binding ReadOnly, Converter={dxschd:InvertedBoolConverter}}" />
+
+        <TextBlock Grid.Row="2" Grid.Column="0" Text="{Binding Source={StaticResource SchedulerControlStringIdConverter}, ConverterParameter=Form_StartTime, Converter={StaticResource SchedulerControlStringIdConverter}}" />
+        <Grid Grid.Row="2" Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <dxe:DateEdit Name="edtStartDate" MinWidth="150" Grid.Row="0" Grid.Column="0" EditValue="{Binding Controller.DisplayStartDate, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,4,4" IsEnabled="{Binding ReadOnly, Converter={dxschd:InvertedBoolConverter}}" />
+            <dxe:ButtonEdit Name="edtStartTime" MinWidth="150" MaskType="DateTime" DisplayFormatString="{Binding TimeEditMask}"  
+                            Mask="{Binding TimeEditMask}" Grid.Row="0" Grid.Column="1" 
+                            EditValue="{Binding Controller.DisplayStartTime, Converter={StaticResource timeSpanToDateTimeConverter}}" AllowDefaultButton="False"
+                            IsEnabled="{Binding ElementName=chkAllDay, Path=IsChecked, Converter={StaticResource invertedBoolConverter}}"
+                            IsReadOnly="{Binding ReadOnly}">
+
+                <dxe:SpinButtonInfo SpinUpCommand="{Binding SpinUpCommand, ElementName=edtStartTime}" SpinDownCommand="{Binding SpinDownCommand, ElementName=edtStartTime}"></dxe:SpinButtonInfo>
+            </dxe:ButtonEdit>
+            <dxe:CheckEdit x:Name="chkAllDay" Margin="16,0,0,4" Grid.Row="0" Grid.Column="2" Content="{Binding Source={StaticResource SchedulerControlStringIdConverter}, ConverterParameter=Form_AllDayEvent, Converter={StaticResource SchedulerControlStringIdConverter}}" EditValue="{Binding Controller.AllDay}" IsReadOnly="{Binding ReadOnly}" IsEnabled="{Binding RecurrenceVisualController.CanChangeAllDay}" />
+        </Grid>
+
+        <TextBlock Grid.Row="3" Grid.Column="0" Text="{Binding Source={StaticResource SchedulerControlStringIdConverter}, ConverterParameter=Form_EndTime, Converter={StaticResource SchedulerControlStringIdConverter}}" Margin="0,0,0,12" />
+        <Grid Grid.Row="3" Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="150" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <dxe:DateEdit Name="edtEndDate" MinWidth="150" Grid.Row="0" Grid.Column="0" EditValue="{Binding Controller.DisplayEndDate}" Margin="0,0,4,12"
+                          Validate="OnEdtEndDateValidate" IsEnabled="{Binding ReadOnly, Converter={dxschd:InvertedBoolConverter}}" />
+
+            <dxe:ButtonEdit Name="edtEndTime" MinWidth="150" Margin="0,0,0,12" MaskType="DateTime" DisplayFormatString="{Binding TimeEditMask}"  
+                            Mask="{Binding TimeEditMask}" Grid.Row="0" Grid.Column="1" 
+                            EditValue="{Binding Controller.DisplayEndTime, Converter={StaticResource timeSpanToDateTimeConverter}}" AllowDefaultButton="False"
+                            IsEnabled="{Binding ElementName=chkAllDay, Path=IsChecked, Converter={StaticResource invertedBoolConverter}}"
+                            Validate="OnEdtEndTimeValidate" IsReadOnly="{Binding ReadOnly}">
+                <dxe:SpinButtonInfo SpinUpCommand="{Binding SpinUpCommand, ElementName=edtEndTime}" SpinDownCommand="{Binding SpinDownCommand, ElementName=edtEndTime}"></dxe:SpinButtonInfo>
+            </dxe:ButtonEdit>
+        </Grid>
+
+        <!--Recurrence Info-->
+        <StackPanel Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" Visibility="{Binding ShouldShowRecurrence, Converter={dxschd:BoolToVisibilityConverter}}">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" SharedSizeGroup="LeftCaptions" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+
+                <TextBlock Grid.Column="0" Text="{Binding Source={StaticResource SchedulerControlStringIdConverter}, ConverterParameter=Form_Recurrence, Converter={StaticResource SchedulerControlStringIdConverter}}" />
+                <dxe:ComboBoxEdit x:Name="cbRecurrence"
+                    Grid.Column="1"
+                    IsTextEditable="false"
+                    ApplyItemTemplateToSelectedItem="True"
+                    ItemTemplate="{StaticResource RecTypeTemplate}"
+                    ItemsSource="{Binding RecurrenceVisualController.RecurrenceElements}"
+                    EditValue="{Binding RecurrenceVisualController.RecurrenceElement, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding ReadOnly, Converter={dxschd:InvertedBoolConverter}}"
+                     >
+                </dxe:ComboBoxEdit>
+                <StackPanel Grid.Row="1" Grid.Column="1" 
+                            Visibility="{Binding RecurrenceVisualController.IsRecurrence, Converter={dxschd:BoolToVisibilityConverter}}">
+                    <GroupBox Header="{Binding Source={StaticResource SchedulerControlStringIdConverter}, ConverterParameter=Form_RecurrencePattern, Converter={StaticResource SchedulerControlStringIdConverter}}" Margin="0,12,0,0">
+                        <StackPanel>
+                            <dxsch:DailyRecurrenceControl x:Name="dailyRecurrenceControl" Visibility="{Binding RecurrenceVisualController.IsDailyRecurrence, Converter={dxschd:BoolToVisibilityConverter}}" RecurrenceInfo="{Binding RecurrenceVisualController.RecurrenceInfo}" IsEnabled="{Binding ReadOnly, Converter={dxschd:InvertedBoolConverter}}" />
+                            <dxsch:WeeklyRecurrenceControl Visibility="{Binding RecurrenceVisualController.IsWeeklyRecurrence, Converter={dxschd:BoolToVisibilityConverter}}" RecurrenceInfo="{Binding RecurrenceVisualController.RecurrenceInfo}" IsEnabled="{Binding ReadOnly, Converter={dxschd:InvertedBoolConverter}}" />
+                            <dxsch:MonthlyRecurrenceControl Visibility="{Binding RecurrenceVisualController.IsMonthlyRecurrence, Converter={dxschd:BoolToVisibilityConverter}}" RecurrenceInfo="{Binding RecurrenceVisualController.RecurrenceInfo}" IsEnabled="{Binding ReadOnly, Converter={dxschd:InvertedBoolConverter}}" />
+                            <dxsch:YearlyRecurrenceControl Visibility="{Binding RecurrenceVisualController.IsYearlyRecurrence, Converter={dxschd:BoolToVisibilityConverter}}" RecurrenceInfo="{Binding RecurrenceVisualController.RecurrenceInfo}" IsEnabled="{Binding ReadOnly, Converter={dxschd:InvertedBoolConverter}}" />
+                        </StackPanel>
+                    </GroupBox>
+                    <GroupBox Header="{Binding Source={StaticResource SchedulerControlStringIdConverter}, ConverterParameter=Form_RangeOfRecurrence, Converter={StaticResource SchedulerControlStringIdConverter}}" Margin="0,12,0,0">
+                        <dxsch:RecurrenceRangeControl RecurrenceInfo="{Binding RecurrenceVisualController.RecurrenceInfo}"
+                        TimeZoneHelper="{Binding ElementName=AptForm, Path=TimeZoneHelper, Mode=OneTime}"
+                        Pattern="{Binding Controller.PatternCopy}" IsEnabled="{Binding ReadOnly, Converter={dxschd:InvertedBoolConverter}}" 
+                        />
+                    </GroupBox>
+                </StackPanel>
+            </Grid>
+        </StackPanel>
+                
+
+            <!--Resources-->
+        <TextBlock Grid.Row="5" Grid.Column="0" VerticalAlignment="Center" Text="{Binding Source={StaticResource SchedulerControlStringIdConverter}, ConverterParameter=Form_Resource, Converter={StaticResource SchedulerControlStringIdConverter}}" Margin="0,8,0,0"
+                       IsEnabled="{Binding Controller.CanEditResource}" />
+            <ContentControl Margin="0,12,0,4" Grid.Row="5" Grid.Column="1" Content="{Binding ElementName=AptForm, Path=Controller}" 
+                            ContentTemplateSelector="{StaticResource ResTemplateSelector}"
+                            IsEnabled="{Binding Controller.CanEditResource}">
+            </ContentControl>
+
+        <TextBlock Grid.Row="6" Grid.Column="0" Text="{Binding Source={StaticResource SchedulerControlStringIdConverter}, ConverterParameter=Form_Label, Converter={StaticResource SchedulerControlStringIdConverter}}"></TextBlock>
+            <Grid Grid.Row="6" Grid.Column="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <Grid Grid.Row="0" Grid.Column="0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+
+                <!--Labels-->
+                <dxsch:AppointmentLabelEdit Grid.Row="0" Grid.Column="0" 
+                    Storage="{Binding Controller.Storage}" EditValue="{Binding Controller.Label, UpdateSourceTrigger=PropertyChanged}" MinWidth="180" IsEnabled="{Binding ReadOnly, Converter={dxschd:InvertedBoolConverter}}">
+                </dxsch:AppointmentLabelEdit>
+
+                <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding Source={StaticResource SchedulerControlStringIdConverter}, ConverterParameter=Form_ShowTimeAs, Converter={StaticResource SchedulerControlStringIdConverter}}" Margin="16,0,4,4"></TextBlock>
+            </Grid>
+                <!--Statuses-->
+                <dxsch:AppointmentStatusEdit Grid.Row="0" Grid.Column="1" 
+                        Storage="{Binding Controller.Storage}" EditValue="{Binding Controller.Status, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding ReadOnly, Converter={dxschd:InvertedBoolConverter}}">
+                </dxsch:AppointmentStatusEdit>
+            </Grid>
+
+            <TextBlock Grid.Row="7" Grid.Column="0" Text="{Binding Source={StaticResource SchedulerControlStringIdConverter}, ConverterParameter=Form_Reminder, Converter={StaticResource SchedulerControlStringIdConverter}}" Margin="0,0,0,12"></TextBlock>
+            <dxe:ComboBoxEdit Grid.Row="7" Grid.Column="1" Margin="0,0,0,12"
+                              IsTextEditable="True"
+                              AutoComplete="True"
+                              ItemsSource="{Binding Controller.ReminderSpans}"
+                              EditValue="{Binding Controller.ReminderSpan}" IsEnabled="{Binding ReadOnly, Converter={dxschd:InvertedBoolConverter}}">
+            
+            </dxe:ComboBoxEdit>
+
+            <TextBlock Grid.Row="8" Grid.Column="0" Text="{Binding Source={StaticResource SchedulerControlStringIdConverter}, ConverterParameter=Form_Description, Converter={StaticResource SchedulerControlStringIdConverter}}" VerticalAlignment="Top" Margin="0,3,0,0"></TextBlock>
+            <dxe:TextEdit Grid.Row="8" Grid.Column="1" VerticalAlignment="Stretch" MinHeight="50" 
+                          Text="{Binding Controller.Description}" AcceptsReturn="True" TextWrapping="Wrap"
+                          VerticalScrollBarVisibility="Visible"
+                          HorizontalContentAlignment="Left" VerticalContentAlignment="Top" IsEnabled="{Binding ReadOnly, Converter={dxschd:InvertedBoolConverter}}" />
+
+            <!--Contact Info (custom field)-->
+            <TextBlock Grid.Row="9" Grid.Column="0" Name="label1" Margin="0,0,0,8" 
+                       HorizontalAlignment="Left"
+                       Text="Contact Info:" />
+            <dxe:TextEdit Grid.Row="9" Grid.Column="1" Grid.ColumnSpan="2" Name="textEdit1" Margin="0,0,0,8"
+                          VerticalAlignment="Stretch" HorizontalAlignment="Stretch"
+                          TextWrapping="Wrap"
+                          AcceptsReturn="True" VerticalScrollBarVisibility="Visible"
+                          Text="{Binding Controller.Contact}" />
+
+            <StackPanel Grid.Row="10" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,8,0,0">
+                <Button Content="{Binding Source={StaticResource SchedulerControlStringIdConverter}, ConverterParameter=ButtonCaption_OK, Converter={StaticResource SchedulerControlStringIdConverter}}" Click="OnOKButtonClick" MinWidth="75" Margin="6,0,0,0" IsEnabled="{Binding ReadOnly, Converter={dxschd:InvertedBoolConverter}}" />
+                <Button Content="{Binding Source={StaticResource SchedulerControlStringIdConverter}, ConverterParameter=ButtonCaption_Cancel, Converter={StaticResource SchedulerControlStringIdConverter}}" Click="OnCancelButtonClick" MinWidth="75" Margin="6,0,0,0" />
+                <Button Content="{Binding Source={StaticResource SchedulerControlStringIdConverter}, ConverterParameter=ButtonCaption_Delete, Converter={StaticResource SchedulerControlStringIdConverter}}" Click="OnDeleteButtonClick" MinWidth="75" Margin="6,0,0,0" Visibility="{Binding Controller.CanDeleteAppointment, Converter={dxschd:BoolToVisibilityConverter}}" IsEnabled="{Binding ReadOnly, Converter={dxschd:InvertedBoolConverter}}" />
+            </StackPanel>
+    </Grid>
+</UserControl>
+
