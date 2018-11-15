@@ -1,3 +1,15 @@
+<!-- default file list -->
+*Files to look at*:
+
+* [CustomAppointmentForm.xaml](./CS/CustomAppointmentForm.xaml)
+* [CustomAppointmentForm.xaml](./CS/CustomAppointmentForm.xaml)
+* [CustomAppointmentForm.xaml.cs](./CS/CustomAppointmentForm.xaml.cs)
+* [CustomAppointmentForm.xaml.vb](./CS/CustomAppointmentForm.xaml.vb)
+* [MainWindow.xaml](./CS/MainWindow.xaml)
+* [MainWindow.xaml](./CS/MainWindow.xaml)
+* [MainWindow.xaml.cs](./CS/MainWindow.xaml.cs)
+* [MainWindow.xaml.vb](./CS/MainWindow.xaml.vb)
+<!-- default file list end -->
 # DXScheduler for WPF - Complete implementation of a Custom Edit Appointment Form
 
 
